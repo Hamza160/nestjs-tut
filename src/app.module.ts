@@ -6,14 +6,16 @@ import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
 import { ConfigModule } from '@nestjs/config';
 import * as joi from 'joi';
+import AppConfig from './config/app.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: joi.object({
-        APP_NAME: joi.string().default('DefaultAppName'),
-      }),
+      // validationSchema: joi.object({
+      //   APP_NAME: joi.string().default('DefaultAppName'),
+      // }),
+      load: [AppConfig],
     }),
     HelloModule,
     UserModule,

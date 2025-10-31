@@ -5,7 +5,8 @@ import { ConfigService } from '@nestjs/config';
 export class AppService {
   constructor(private configService: ConfigService) {}
   getHello(): string {
-    const APP_NAME = this.configService.get<string>('APP_NAME')!;
+    // const APP_NAME = this.configService.get<string>('APP_NAME')!;
+    const APP_NAME = this.configService.get<string>('appName')!;
     return 'Hello World! ' + APP_NAME;
   }
 }
