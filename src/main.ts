@@ -4,13 +4,14 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  // global settings
+
+  // Validating incoming requests bodies automatically
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // strips properties that don't have decorators
       forbidNonWhitelisted: true,
       transform: true, // transform payload as per their DTO classes
-      disableErrorMessages: true,
+      disableErrorMessages: false,
     }),
   );
   // env settings
