@@ -16,7 +16,7 @@ import { Post } from './posts/entities/post.entity';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
-      port: 5432,
+      port: 5434,
       username: 'postgres',
       password: 'postgres',
       database: 'postgres',

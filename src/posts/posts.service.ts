@@ -1,38 +1,38 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Post } from './interfaces/Post.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Post } from './entities/post.entity';
 
 @Injectable()
 export class PostsService {
-  private posts: Post[] = [
-    {
-      id: 1,
-      title: 'First',
-      content: 'First Post Content',
-      authorName: 'Hamza Ashraf',
-      createdAt: new Date(),
-    },
-  ];
+  private posts: Post[] = [];
 
-  findAll(): Post[] {
-    return this.posts;
+  constructor(
+    @InjectRepository(Post),
+    private postRepository: Repository<Post>
+
+  ) {
+  }
+  async findAll(): Promise<Post[]> {
+    return this.postRepository.find();
   }
 
-  findOne(id: number) {
-    const post = this.posts.find((post) => post.id === id);
+  async findOne(id: number) {
+    const post = await this.postRepository.findOneBy({id});
     if (!post) {
       throw new NotFoundException('Post not found');
     }
     return post;
   }
 
-  create(createPostData: Omit<Post, 'id' | 'createdAt'>): Post {
-    const newPost: Post = {
-      id: this.getNextId(),
-      ...createPostData,
-      createdAt: new Date(),
-    };
-    this.posts.push(newPost);
-    return newPost;
+  async create(createPostData: Omit<Post, 'id' | 'createdAt'>): Promise<Post> {
+    const newPost = this.postRepository.create({
+      title: createPostData.title,
+      content: createPostData.content,
+      authorName: createPostData.authorName,
+    });
+
+    return this.postRepository.save(newPost);
   }
 
   update(id: number, updatePostData: Partial<Omit<Post, 'id' | 'createdAt'>>) {
